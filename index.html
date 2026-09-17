@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Jahana Tuition</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#071d32">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Jahana Tuition">
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,sans-serif;color:#fff}
+#stage{position:absolute;width:1366px;height:768px;left:50%;top:50%;transform-origin:center center}
+.screen{position:absolute;inset:0;display:none}.screen.active{display:block}
+#loading{background:linear-gradient(#061321cc,#061321ee),radial-gradient(circle at 50% 20%,#315a70,#061321 72%);text-align:center}
+.loadTitle{margin-top:105px;font-size:76px;font-weight:900;text-shadow:5px 5px #111}.loadTitle span{color:#ffc629}
+.loadSub{font-size:27px;color:#ffd63f;font-weight:bold}.book{font-size:78px;margin-top:80px;animation:b 1s infinite alternate}@keyframes b{to{transform:translateY(-12px)}}
+.lt{font-size:35px;font-weight:bold;margin-top:8px}.ls{color:#bcd0df;margin-top:8px}
+.bar{width:600px;height:27px;border:2px solid #18a9ec;border-radius:20px;background:#102c43;margin:22px auto 0;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#ffb300,#ffe45b)}
+.bottom{position:absolute;bottom:24px;left:35px;right:35px;display:flex;justify-content:space-between;color:#bcd0df}
+#main{background:linear-gradient(#061525b8,#061525ef),radial-gradient(circle at 50% 15%,#355c6e,#061321 70%)}
+.header{position:absolute;left:245px;right:270px;top:12px;text-align:center}.header h1{font-size:58px;margin:0;font-weight:900;text-shadow:4px 4px #111}.header h1 span{color:#ffc629}.header h2{margin:0;color:#ffd43e;font-size:25px}.header p{margin:4px;color:#c8d9e4}
+.room{position:absolute;right:18px;top:14px;width:260px;background:#08233b;border:2px solid #1187d5;border-radius:15px;padding:12px}.room b{font-size:18px}.green{color:#52ff8b}
+.players{position:absolute;left:235px;right:280px;top:130px;height:105px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.player{background:#102b45;border:2px solid #2189df;border-radius:17px;text-align:center;padding:6px}.player:nth-child(2){border-color:#ed48b0}.player:nth-child(3){border-color:#31df7a}.player:nth-child(4){border-color:#ff9f1b}.face{font-size:38px}.pn{font-weight:bold;font-size:18px}.ps{font-size:13px;color:#ffe16b}
+.left{position:absolute;left:12px;top:250px;width:225px;bottom:40px}.right{position:absolute;right:12px;top:250px;width:250px;bottom:40px}
+.panel{background:#0b2239;border:2px solid #173f61;border-radius:16px;padding:12px;margin-bottom:11px}.pt{font-size:19px;font-weight:bold;color:#ffd43f;margin-bottom:10px}.lesson{background:#10324e;border:1px solid #286c99;border-radius:9px;padding:9px;margin-bottom:7px;font-size:13px}.lesson.active{background:#087ed0}
+.pg{margin:8px 0}.pgt{display:flex;justify-content:space-between;font-size:12px}.line{height:7px;background:#24465e;border-radius:8px;overflow:hidden;margin-top:4px}.line div{height:100%;background:#1eb8f4;width:0}
+.center{position:absolute;left:250px;right:275px;top:250px;bottom:40px}.qcard{height:100%;background:#071d32;border:2px solid #176391;border-radius:18px;padding:15px 20px}
+.qtop{display:flex;justify-content:space-between;color:#b8cad7}.qno{color:#58d8ff;font-weight:bold}.timer{color:#ffd43e;font-weight:bold}.q{font-size:29px;font-weight:bold;line-height:1.25;margin:24px 0 18px}.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}.opt{min-height:62px;border:2px solid #285978;border-radius:12px;background:#12304c;color:#fff;text-align:left;padding:12px;font-size:16px;font-weight:bold;cursor:pointer}.opt:hover{border-color:#ffd43e}.opt.ok{background:#08653a;border-color:#42f48e}.opt.bad{background:#702e3a;border-color:#ff6678}.feedback{height:55px;margin-top:13px;border-radius:10px;background:#0d2942;padding:12px;color:#d5e5ef}.next{width:100%;margin-top:8px;height:48px;border:0;border-radius:12px;background:#ffc21c;font-weight:bold;font-size:16px;cursor:pointer}.next:disabled{opacity:.45}
+.rank{display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid #24465e}.rank:last-child{border:0}.tracker{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}.dot{height:20px;border-radius:5px;background:#203f58;text-align:center;font-size:11px;padding-top:3px}.dot.done{background:#16c879}.dot.now{background:#ffb51b;color:#111}
+#rotate{display:none}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<section id="loading" class="screen active">
+  <div class="loadTitle">👑 JAHANA <span>TUITION</span></div>
+  <div class="loadSub">Class 10 SEBA • English</div>
+  <div class="book">📖</div>
+  <div class="lt">Loading...</div>
+  <div class="ls">Preparing your classroom...</div>
+  <div class="bar"><div id="fill" class="fill"></div></div>
+  <div id="percent">0%</div>
+  <div class="bottom"><span>📚 English • Lesson 1 & 2</span><span>👥 4 Players • 30 Questions Each</span></div>
+</section>
+
+<section id="main" class="screen">
+  <div class="header"><h1>👑 JAHANA <span>TUITION</span></h1><h2>Class 10 SEBA • English</h2><p>Learn • Compete • Grow</p></div>
+  <div class="room"><b>🎮 Multiplayer Room</b><br>Room ID: JT-SEBA10<br><span class="green">● 4/4 Players Ready</span></div>
+
+  <div class="players">
+    <div class="player"><div class="face">👦</div><div class="pn">Abhit</div><div class="ps" id="s0">⭐ 0</div></div>
+    <div class="player"><div class="face">👧</div><div class="pn">Barlin</div><div class="ps" id="s1">⭐ 0</div></div>
+    <div class="player"><div class="face">😎</div><div class="pn">Tasdik</div><div class="ps" id="s2">⭐ 0</div></div>
+    <div class="player"><div class="face">👦</div><div class="pn">Tanzil</div><div class="ps" id="s3">⭐ 0</div></div>
+  </div>
+
+  <aside class="left">
+    <div class="panel"><div class="pt">📚 Lessons & Questions</div>
+      <div class="lesson active"><b>Lesson 1</b>A Letter to God<br>15 Questions</div>
+      <div class="lesson"><b>Lesson 2</b>Nelson Mandela<br>15 Questions</div>
+    </div>
+    <div class="panel"><div class="pt">📊 Progress</div><div id="progress"></div></div>
+  </aside>
+
+  <main class="center">
+    <div class="qcard">
+      <div class="qtop"><span class="qno">Question <span id="qn">1</span> / 30</span><span class="timer">⏱️ <span id="time">30</span>s</span></div>
+      <div id="question" class="q"></div>
+      <div id="options" class="opts"></div>
+      <div id="feedback" class="feedback">All four players answer the same question. +20 for a correct answer.</div>
+      <button id="next" class="next" disabled>NEXT QUESTION →</button>
+    </div>
+  </main>
+
+  <aside class="right">
+    <div class="panel"><div class="pt">🏆 Live Leaderboard</div><div id="leaderboard"></div></div>
+    <div class="panel"><div class="pt">🔢 Question Tracker</div><div id="tracker" class="tracker"></div></div>
+  </aside>
+</section>
+</div>
+
+<script>
+const questions=[
+["Who is the main character in 'A Letter to God'?",["Lencho","The Postmaster","Pedro","Felipe"],0],
+["What was Lencho's occupation?",["Teacher","Farmer","Postman","Shopkeeper"],1],
+["What did Lencho hope would come for his crops?",["Snow","Rain","Wind","Fog"],1],
+["What destroyed Lencho's crop?",["Drought","Flood","Hailstorm","Fire"],2],
+["What did Lencho compare the raindrops to?",["New coins","Stones","Pearls","Glass"],0],
+["What did Lencho need after the storm?",["Money for seeds","A new house","A job","A horse"],0],
+["How much money did Lencho ask God for?",["50 pesos","70 pesos","100 pesos","200 pesos"],2],
+["Who first saw Lencho's letter?",["A farmer","The postmaster","A policeman","His son"],1],
+["What did the postmaster admire in Lencho?",["His handwriting","His faith","His farming","His wealth"],1],
+["Why did the postmaster collect money?",["For fame","To maintain Lencho's faith","For a reward","For himself"],1],
+["How much money did the postmaster send Lencho?",["100 pesos","70 pesos","50 pesos","30 pesos"],1],
+["Why was Lencho unhappy after receiving the money?",["The letter was late","The amount was less than he requested","The post office was closed","His crops grew again"],1],
+["Whom did Lencho suspect had taken the missing money?",["Neighbours","Post office employees","His family","Farmers"],1],
+["What did Lencho call the post office employees?",["Honest men","A bunch of crooks","Good friends","Hard workers"],1],
+["What is a central theme of 'A Letter to God'?",["Faith and kindness","Technology","Travel","Sports"],0],
+["Who is the central figure in 'Nelson Mandela'?",["Mahatma Gandhi","Nelson Mandela","Abraham Lincoln","Martin Luther King Jr."],1],
+["What event is described at the beginning of the lesson?",["A birthday","Mandela's inauguration","A war","A school opening"],1],
+["Where did Mandela's inauguration take place?",["Cape Town","Pretoria","Johannesburg","Durban"],1],
+["What system of racial discrimination did Mandela oppose?",["Monarchy","Apartheid","Democracy","Federalism"],1],
+["Mandela became the first what of South Africa?",["King","Black president","Governor","Prime Minister"],1],
+["According to Mandela, what is true courage?",["Never feeling fear","Victory over fear","Having power","Being famous"],1],
+["What did Mandela learn about freedom?",["It is only for leaders","It is indivisible","It is unnecessary","It belongs to one group"],1],
+["What two obligations does Mandela discuss?",["Family and people","School and friends","Work and money","Army and state"],0],
+["Why was it difficult for Mandela to fulfil both obligations?",["He was too young","Apartheid restricted freedom","He disliked his family","He moved away"],1],
+["What did Mandela's desire for freedom become?",["Weaker","Stronger","Forgotten","Unimportant"],1],
+["What does Mandela say about the oppressor?",["The oppressor is also not truly free","The oppressor is always happy","The oppressor has no duties","The oppressor is always poor"],0],
+["What does Mandela say about the oppressed?",["They can also lose their humanity","They never want freedom","They are always happy","They have no courage"],0],
+["According to Mandela, can people learn to love?",["No","Yes","Only leaders can","Only children can"],1],
+["What kind of society did Mandela dream of?",["Equality and freedom","One-person rule","No laws","No education"],0],
+["What is a central message of the lesson?",["Freedom and equality require courage and struggle","Power is everything","Fear should control society","People should avoid responsibility"],0]
+];
+
+const names=["Abhit","Barlin","Tasdik","Tanzil"];
+const emoji=["👦","👧","😎","👦"];
+let scores=[0,0,0,0], qIndex=0, currentPlayer=0, time=30, interval, locked=false;
+const $=id=>document.getElementById(id);
+
+function fit(){
+  const stage=document.getElementById("stage");
+  const portrait=innerHeight>innerWidth;
+
+  if(portrait){
+    // Keep the landscape game visible even when the phone is held vertically.
+    const scale=Math.min(innerHeight/1366,innerWidth/768);
+    stage.style.transform=`translate(-50%,-50%) rotate(90deg) scale(${scale})`;
+  }else{
+    const scale=Math.min(innerWidth/1366,innerHeight/768);
+    stage.style.transform=`translate(-50%,-50%) scale(${scale})`;
+  }
+}
+addEventListener("resize",fit);
+addEventListener("orientationchange",()=>setTimeout(fit,100));
+fit();
+
+let load=0;
+const li=setInterval(()=>{
+  load+=2;$("fill").style.width=load+"%";$("percent").textContent=load+"%";
+  if(load>=100){clearInterval(li);setTimeout(()=>{document.getElementById("loading").classList.remove("active");document.getElementById("main").classList.add("active");render();loadQuestion()},300)}
+},35);
+
+function render(){
+  for(let i=0;i<4;i++) $("s"+i).textContent="⭐ "+scores[i];
+  $("progress").innerHTML=names.map((n,i)=>`<div class="pg"><div class="pgt"><span>${emoji[i]} ${n}</span><span>${Math.min(qIndex,30)}/30</span></div><div class="line"><div style="width:${qIndex/30*100}%"></div></div></div>`).join("");
+  const order=[0,1,2,3].sort((a,b)=>scores[b]-scores[a]);
+  $("leaderboard").innerHTML=order.map((i,p)=>`<div class="rank"><span>${p+1}. ${emoji[i]} ${names[i]}</span><b>${scores[i]}</b></div>`).join("");
+  $("tracker").innerHTML=Array.from({length:30},(_,i)=>`<div class="dot ${i<qIndex?"done":i===qIndex?"now":""}">${i+1}</div>`).join("");
+}
+
+function loadQuestion(){
+  if(qIndex>=30){finish();return}
+  locked=false;time=30;$("time").textContent=time;$("qn").textContent=qIndex+1;
+  const q=questions[qIndex];$("question").textContent=q[0];
+  $("options").innerHTML=q[1].map((a,i)=>`<button class="opt" onclick="answer(${i},this)">${String.fromCharCode(65+i)}. ${a}</button>`).join("");
+  $("feedback").textContent=`👥 ${names[currentPlayer]} is answering...`;
+  $("next").disabled=true;
+  clearInterval(interval);interval=setInterval(()=>{time--;$("time").textContent=time;if(time<=0){clearInterval(interval);if(!locked){locked=true;disable();$("feedback").textContent="⏰ Time's up!";$("next").disabled=false}}},1000);
+  render();
+}
+
+function disable(){document.querySelectorAll(".opt").forEach(b=>b.disabled=true)}
+
+function answer(i,btn){
+  if(locked)return;locked=true;clearInterval(interval);
+  const q=questions[qIndex], all=document.querySelectorAll(".opt");all.forEach(b=>b.disabled=true);
+  if(i===q[2]){btn.classList.add("ok");scores[currentPlayer]+=time>=20?25:20;$("feedback").textContent=`✅ Correct! ${names[currentPlayer]} gets ${time>=20?25:20} points.`}
+  else{btn.classList.add("bad");all[q[2]].classList.add("ok");$("feedback").textContent=`❌ Correct answer: ${q[1][q[2]]}`}
+  $("next").disabled=false;render();
+}
+
+$("next").onclick=()=>{qIndex++;currentPlayer=(currentPlayer+1)%4;loadQuestion()};
+
+function finish(){
+  clearInterval(interval);
+  const order=[0,1,2,3].sort((a,b)=>scores[b]-scores[a]);
+  $("question").textContent="🏆 MATCH COMPLETE!";
+  $("options").innerHTML=order.map((i,p)=>`<div style="grid-column:1/-1;background:#102f4a;border-radius:12px;padding:15px;font-size:20px">${p+1}. ${emoji[i]} ${names[i]} — ⭐ ${scores[i]} points</div>`).join("");
+  $("feedback").textContent="🎉 Everyone completed 30 questions!";
+  $("next").style.display="none";
+}
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>
